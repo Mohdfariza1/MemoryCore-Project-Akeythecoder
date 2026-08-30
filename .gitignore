@@ -1,3 +1,27 @@
 .DS_Store
 *.swp
 *~
+
+# ── Client-confidential — never publish ──────────────────────────
+# This repo is public. Project profiles, decisions, post-mortems and
+# session state contain client names, pricing floors and negotiation
+# strategy. The reusable protocols (core-*.md) are the open-source part.
+memory/Projects/
+memory/decisions.md
+memory/post-mortems.md
+memory/projects-lru.md
+memory/study-plan.md
+memory/study-plan-database.md
+session-memory.md
+tornado-funnel-content-*.md
+.progressrc
+
+# Protocol files that accumulated real client names/pricing in use.
+# The public repo's committed versions were clean; these local ones are not.
+memory/00-identity.md
+memory/07-self-evolution.md
+memory/core-pattern-library.md
+memory/core-autocount.md
+memory/core-business-sop.md
+memory/feedback_stitch_vs_handcoded.md
+memory/core-progress-tracker.md

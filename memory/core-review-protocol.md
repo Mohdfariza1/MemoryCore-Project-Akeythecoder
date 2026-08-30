@@ -12,16 +12,27 @@
 
 ## Checklist
 
+### 0. Planning Gate ⛔
+- [ ] `Planning.md` exists in project root — if not, **stop and create it first**
+- [ ] Planning.md has: Overview, Stack, Structure, Flow Plan, Estimated Delivery
+- [ ] No code was written before Planning.md existed
+
 ### 1. Variables & Types
 - [ ] All variables initialized before use
 - [ ] No undefined variable warnings
 - [ ] Type definitions updated (if using TypeScript)
 
 ### 2. Security
-- [ ] No SQL injection (use parameterized queries or ORM)
+- [ ] **SQL Injection** — parameterized queries or ORM only, never string concat
+- [ ] **XSS** — user content escaped before render, no dangerouslySetInnerHTML with user data
+- [ ] **RCE** — no eval/exec/shell_exec with user input, no dynamic require from user paths
+- [ ] **SSRF** — no outbound fetch to user-supplied URLs without domain allowlist + block internal IPs
+- [ ] **IDOR** — every resource fetch/update/delete checks `owner_id === current_user.id`
+- [ ] **Path Traversal** — file paths never built from user input, strip `../` always
+- [ ] **Publicly accessible DB** — DB port not exposed, not default credentials
 - [ ] No mass assignment vulnerability (use allowlists)
 - [ ] CSRF exempted ONLY for payment/webhook callbacks
-- [ ] File uploads validated (type, size)
+- [ ] File uploads validated (type, size, renamed to UUID)
 - [ ] No sensitive data exposed to frontend (passwords, secrets, tokens)
 - [ ] Auth middleware on all protected routes
 

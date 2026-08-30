@@ -53,6 +53,35 @@
 - [ ] Only exempt webhook/callback routes (document why)
 - [ ] API routes use token-based auth instead of session cookies
 
+### RCE (Remote Code Execution)
+- [ ] No user input passed to `eval()`, `exec()`, `system()`, `shell_exec()`, `subprocess`
+- [ ] No dynamic `require`/`import` with user-controlled paths
+- [ ] Deserialization of untrusted data disabled or strictly validated
+- [ ] Template engines configured to prevent SSTI (Server-Side Template Injection)
+- [ ] If shell exec unavoidable: use allowlist + escape, never raw user input
+
+### SSRF (Server-Side Request Forgery)
+- [ ] Never fetch URLs constructed from user input without validation
+- [ ] Allowlist permitted domains/IPs for outbound requests
+- [ ] Block internal IP ranges: 127.x, 10.x, 172.16-31.x, 192.168.x, 169.254.x
+- [ ] Disable redirects on outbound HTTP clients (or validate redirect target)
+- [ ] Webhook URLs from users must be validated against allowlist
+- [ ] Cloud metadata endpoints (169.254.169.254) explicitly blocked
+
+### IDOR (Insecure Direct Object Reference)
+- [ ] Never expose raw database IDs in URLs without ownership check
+- [ ] Every resource access verifies: `resource.owner_id === current_user.id`
+- [ ] Bulk operations (update/delete) filter by owner — never by ID alone
+- [ ] Sequential/predictable IDs: use UUIDs or signed tokens where sensitive
+- [ ] API responses never return other users' data based on ID manipulation
+
+### Path Traversal
+- [ ] Never construct file paths from user input directly
+- [ ] Sanitize: strip `../`, `..\\`, null bytes from any path parameter
+- [ ] Resolve to absolute path and verify it starts within allowed base directory
+- [ ] File download endpoints: map slug/token to path server-side — never accept raw paths
+- [ ] Uploads: use generated filenames (UUID), never original filename as path
+
 ### Command Injection
 - [ ] No user input passed to shell commands (`exec`, `system`, `shell_exec`)
 - [ ] If unavoidable, use allowlists and escape functions
@@ -131,15 +160,23 @@
 - [ ] Database backups configured and tested
 - [ ] Logging enabled for auth events and errors
 - [ ] Admin panel not publicly accessible (IP restrict or VPN)
+- [ ] Database NOT publicly accessible — bind to localhost or private VPC only
+- [ ] Database port (3306, 5432, 27017) not exposed to public internet
+- [ ] Database credentials rotated from defaults — no `root`/`admin`/`password`
+- [ ] Firewall rules: DB accepts connections from app server only, not 0.0.0.0
 
 ---
 
 ## Quick Security Scan (5-Second Check)
 For any change, at minimum verify:
 1. **Secrets safe?** — No keys/tokens in code or git
-2. **Input trusted?** — All user input validated/escaped
-3. **Access controlled?** — Auth + ownership checks on route
-4. **Data scoped?** — Queries filtered by user/tenant
+2. **Injection?** — SQL, XSS, RCE, Command — never raw user input in queries/shell/eval
+3. **SSRF?** — Any outbound URL from user input? Validate + block internal IPs
+4. **IDOR?** — Every resource access checks ownership, not just ID existence
+5. **Path Traversal?** — File paths never built from user input directly
+6. **Access controlled?** — Auth + ownership checks on every route
+7. **Data scoped?** — Queries filtered by user/tenant
+8. **DB exposed?** — Database port not public, not default credentials
 
 ---
 

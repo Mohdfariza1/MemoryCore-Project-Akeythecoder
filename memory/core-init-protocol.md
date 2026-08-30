@@ -54,12 +54,33 @@ Add entry to `~/.claude/project-labels.json` mapping the project's folder key to
 ### 3d. Create Session Memory
 Create `session-memory.md` in project root using the template from `06-session-memory-format.md`.
 
-### 3e. Create Planning Doc (if complex)
-For projects with 3+ features, create `Planning.md` in project root:
-- Database schema design
-- Route plan
-- Phase breakdown
-- Key decisions
+### 3e. Secrets Hygiene Baseline (automatic, no need to ask)
+- [ ] Create `.gitignore` with `.env`, `.env.*`, `*.pem`, `*.key`, `credentials*.json`, `secrets*` covered from commit #1
+- [ ] Create `.env.example` alongside any `.env` — placeholder values only, real `.env` never committed
+- [ ] Never hardcode API keys/tokens/passwords in source — env vars only
+- If the project stores highly sensitive files in the repo itself (client data, private keys) rather than just runtime secrets, offer `git-crypt` or `age` to encrypt those specific paths at rest
+
+### 3f. Create Planning.md ⛔ HARD GATE
+**Mandatory for every project, no exceptions. No code or docs before this exists.**
+
+Create `Planning.md` in project root with this format:
+```
+## Overview
+What is this project? Who uses it? What problem does it solve?
+
+## Stack
+Frontend / Backend / DB / Auth / Deploy / Integrations
+
+## Structure
+Pages/routes/screens and what each does
+
+## Flow Plan
+Step-by-step user + system flow (checkout, auth, upload, etc.)
+
+## Estimated Delivery
+Week-by-week breakdown
+```
+If Planning.md is missing when starting any task → create it first before touching any code or file.
 
 ---
 
