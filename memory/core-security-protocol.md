@@ -167,6 +167,23 @@
 
 ---
 
+## 9. Client-hosted servers (VPS / on-prem) — added 2026-08-31
+
+Applies whenever we recommend or set up hosting that holds a client's business system
+(accounting, ERP, anything with their money in it).
+
+- 🔴 **Never expose RDP (3389) to the open internet.** Exposed RDP is one of the most common
+  ransomware entry points. VPN in, or at minimum IP allowlisting + Network Level Authentication
+  + strong credentials. **Quote this WITH the hosting, never as an optional extra** — a client
+  who declines the VPN has made an informed choice; one who was never offered it has our
+  fingerprints on the breach.
+- 🔴 **Never expose SQL Server (1433) to the internet.** If an app needs the database from
+  elsewhere, the app moves to the server — not the port to the world.
+- **Read-only DB login for anything that only reads.** Already standard for AutoCount syncs
+  (see [[core-autocount]]); it applies to every client database we touch.
+- **Backups become someone's job the moment the data leaves their office PC.** Name who, in
+  writing, before go-live.
+
 ## Quick Security Scan (5-Second Check)
 For any change, at minimum verify:
 1. **Secrets safe?** — No keys/tokens in code or git
