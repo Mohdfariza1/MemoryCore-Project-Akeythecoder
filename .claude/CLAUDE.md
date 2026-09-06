@@ -40,6 +40,7 @@ When completing significant work, update the relevant project profile in MemoryC
 - **Format reference**: `{MEMORY_PATH}/06-session-memory-format.md`
 - **Applies to ALL projects** (current and future)
 - At **session start**: Check if `session-memory.md` exists in the project root. If yes, read it for instant context. If no, create one using the format template.
+- A SessionStart hook (`hooks/session-start.ps1`) prints it automatically, including after compaction. Still read the project profile yourself.
 - At **session end** or after completing significant work: Update the session memory with current state (tasks, recent changes, recap).
 - At **500 lines**: Auto-reset — preserve only `## Session Recap`, clear everything else, rebuild from template.
 - Keep recap under **30 lines** — lean and essential info only.
@@ -47,6 +48,7 @@ When completing significant work, update the relevant project profile in MemoryC
 ## Self-Evolution
 - **Protocol**: `{MEMORY_PATH}/07-self-evolution.md`
 - **BEFORE coding**: At session start and before any significant task, read the self-evolution protocol — especially **Anti-Patterns** and **Learned Skills**. Apply them proactively to avoid past mistakes and use best patterns in new code.
+- **Confidence + Scope**: every skill/anti-pattern carries `Confidence` (0.3 / 0.6 / 0.9 by sightings) and `Scope` (project or global). Global + 0.9 is the only path into this file.
 - **AFTER coding**: Run self-reflection automatically alongside saves. Check for new skills, anti-patterns, and rule updates.
 - **Manual trigger**: "{AGENT_NAME}-Evolve" — forces immediate self-reflection even without a save
 - **Correction trigger**: When {USER_NAME} corrects your approach, treat it as an evolution trigger immediately
@@ -66,6 +68,7 @@ When completing significant work, update the relevant project profile in MemoryC
 ## Review Protocol
 - **Protocol**: `{MEMORY_PATH}/core-review-protocol.md`
 - **AFTER every significant task**: Run the review checklist before saying "done"
+- **Verification order** before "done": build → typecheck → lint → tests → secret grep → live run → diff review. Stop at the first failure.
 - Covers: variables, security, data isolation, file uploads, payment, database, frontend, props, routes, edge cases
 
 ## MIMIC Protocol (Stack Migration)
@@ -104,6 +107,7 @@ When completing significant work, update the relevant project profile in MemoryC
 ## Observation
 - **Protocol**: `{MEMORY_PATH}/core-observation.md`
 - 4 tiers: Survey (30s) → Investigate (5min) → Refine (5min) → Audit (15min)
+- **Fact Gate** before the first edit to any existing file: who imports it, what the data really is, what was actually asked
 - Auto-run Refine after every significant feature (same as review protocol)
 - Always state tier + estimated effort before starting
 

@@ -84,6 +84,27 @@
 - [ ] Concurrent access handled (lock for update on stock/balance)
 - [ ] Soft-deleted records excluded from active lists
 
+### 11. Silent Failures
+- [ ] No empty `catch {}` — every catch handles, rethrows, or logs with context
+- [ ] No fallback that hides a failure (`.catch(() => [])`, `?? 0`, `|| "N/A"` on a failed fetch) — an empty result must look different from an error
+- [ ] Wrapped errors unwrapped before matching — ORMs and fetch libraries nest the real error (Drizzle: `err.cause.code`, not `err.code`)
+- [ ] Network, file and DB calls have a timeout and a failure path
+- [ ] Multi-step writes run in a transaction with rollback
+- [ ] The user sees a message on failure — never a silent 500 or a form that "just resets"
+- [ ] Logs carry enough context to find the row (id, user, action), not just "error"
+
+---
+
+## Verification Order (before saying "done")
+Run in this order. Stop at the first failure and fix it before moving on. Type-checks prove shape, not behaviour.
+1. **Build** — `npm run build` (or the stack's equivalent). Tail the output and read it.
+2. **Typecheck** — `npx tsc --noEmit` / `pyright`.
+3. **Lint** — `npm run lint` / `ruff check`. Never weaken the lint config to pass. Fix the code.
+4. **Tests** — if the project has them, run them. Do not write a suite just to tick this box.
+5. **Secret + debug grep** — `sk-`, `api_key`, `password=`, `console.log` inside `src/`. Anything found is a blocker.
+6. **Live run** — a row goes in and comes back out, a page renders, an action fires. DB-backed builds need this on a real cluster (see the throwaway Postgres skill in `07-self-evolution.md`). No live run, no "done".
+7. **Diff review** — `git diff --stat`. Every changed file was meant to change. A size delta that does not match the edit is a red flag (CRLF, BOM, formatter).
+
 ---
 
 ## Quick Scan (3-Second Check)

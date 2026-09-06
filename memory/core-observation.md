@@ -31,6 +31,15 @@ Full system analysis. Run sparingly.
 - Output: full report with severity-ranked findings
 - Connects to: Security Protocol (`core-security-protocol.md`)
 
+## Fact Gate (before the first edit to any existing file, ~1 min)
+Reading the file is not enough. Before the first Edit/Write to a file, answer three things:
+1. **Who uses it** — grep for importers and callers. A change here breaks them, not just this file.
+2. **What the data really is** — check the schema, type, or DB column, not the variable name. The name says `price`; the column may say `price_cents`.
+3. **What was actually asked** — re-read the request. If the edit goes beyond it, say so before making it.
+
+On Windows, also check line endings (`file <path>`) before any shell-based rewrite. CRLF files get Python binary-mode edits, never `sed -i`.
+Skip the gate only for a file created in this session.
+
 ## Escalation Logic
 Survey → finds issues → escalate to Investigate
 Investigate → finds systemic problems → escalate to Audit
@@ -51,6 +60,7 @@ Run Lv.2 Refine on recently changed code.
 Run Lv.3 Audit on full project. Confirm with {USER_NAME} before starting (it's expensive).
 
 ## Auto-Behavior
+- Fact Gate runs before the first edit to any existing file
 - After every significant feature: auto-run Refine (same as review protocol)
 - If Survey finds Critical issues: immediately propose escalation to Investigate
 - Passive observation: note recurring patterns in {USER_NAME}'s code for self-evolution
